@@ -1,0 +1,81 @@
+# ---------------------------------\
+#                                  |
+#       PlatinumBDS Settings       |
+#                                  |
+# ---------------------------------/
+
+# Whether modules will load or not.
+
+mod-enabled=true
+
+# For 1.16.20 ~ 1.16.201. It might work on a few versions below 1.16.20, 
+# but some mods may not support all versions. (base version: 1.16.20)
+# If turned off, it will support the latest version.
+# Allowed values: true/false
+
+legacy-bds-version=false
+
+# ---------------------------------\
+#                                  |
+#       Module      Settings       |
+#                                  |
+# ---------------------------------/
+
+#
+# -- Knockback Mod --
+#
+
+# true - this module will be enabled.
+# false - this module will be disabled.
+
+knockback:enabled=false
+
+# true - the server will use 1.12.0 and below knockback. This allows for more dynamic knockback
+# false - the server will use new knockback.
+
+knockback:use-legacy-knockback=true
+
+# Whether or not editing BDS knockback is enabled.
+
+knockback:is-editing-knockback=false
+
+# Whether or not the knockback values you enter are (original) + offset, meaning knockback
+# depends on the vanilla knockback added to your custom values.
+
+knockback:is-offset=false
+
+# The vertical (+y) knockback. Without is-offset enabled, the default value is (0.40)
+
+knockback:vertical-knockback=1.0
+
+# The horizontal (+x, z) knockback. The default depends if you have legacy knockback (usually 1.0)
+# on or off (usually 0.50).
+
+knockback:horizontal-knockback=1.0
+
+#
+# -- HurtTime Mod --
+#
+
+# true - this module will be enabled.
+# false - this module will be disabled.
+
+hurt-time:enabled=false
+
+# integer - The delay between hits of entities.
+
+hurt-time:hurt-time=10
+
+#
+# -- Basic Anti Cheat --
+#
+
+# true - this module will be enabled.
+# false - this module will be disabled.
+
+anti-cheat:enabled=false
+
+# Whether it will patch a movement exploit
+# that will crash a server.
+
+anti-cheat:anti-crasher=true
