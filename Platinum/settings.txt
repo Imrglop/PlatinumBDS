@@ -79,3 +79,12 @@ anti-cheat:enabled=false
 # that will crash a server.
 
 anti-cheat:anti-crasher=true
+
+#
+# -- Seed Hider --
+#
+
+# true - this module will be enabled.
+# false - this module will be disabled.
+
+seed-hider:enabled=false

@@ -14,6 +14,11 @@
 */
 
 #define WIN32_LEAN_AND_MEAN
+#define PLATINUM_DBG // For debugging purposes.
+
+#if defined(_DEBUG)
+#	define PLATINUM_DBG
+#endif
 
 #pragma once
 #include <iostream>
@@ -25,10 +30,15 @@ void setConsoleColor(WORD attributes);
 typedef unsigned char byte;
 
 #define _PLOG(l, x) std::cout<<"["<<l<<"] [INFO] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl
-#define _PERR(l, x) std::cout<<"["<<l<<"] [ERROR] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl
-#define _PWARN(l, x) std::cout<<"["<<l<<"] [WARN] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl
-#define _PDBG(l, x) std::cout<<"["<<l<<"] [DEBUG] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl
+#define _PERR(l, x) setConsoleColor(0xC); std::cout<<"["<<l<<"] [ERROR] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
+#define _PWARN(l, x) setConsoleColor(0xE); std::cout<<"["<<l<<"] [WARN] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
+#if defined(PLATINUM_DBG)
+#	define _PDBG(l, x) setConsoleColor(0xB); std::cout<<"["<<l<<"] [DEBUG] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
+#endif
+
 #define llog(x) _PLOG("Platinum", x)
-#define lerr(x) setConsoleColor(0xC); _PERR("Platinum", x); setConsoleColor(0x7)
-#define lwarn(x) setConsoleColor(0xE); _PWARN("Platinum", x); setConsoleColor(0x7)
-#define ldbg(x) setConsoleColor(0xB); _PDBG("Platinum", x); setConsoleColor(0x7)
+#define lerr(x) _PERR("Platinum", x)
+#define lwarn(x) _PWARN("Platinum", x)
+#if defined(PLATINUM_DBG)
+#	define ldbg(x) _PDBG("Platinum", x)
+#endif

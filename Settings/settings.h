@@ -29,7 +29,7 @@ namespace settings {
 	Config* getSigCache();
 	Config* getSettings();
 
-	std::string getFunction(std::string pdbFunction);
+	std::string getFunction(std::string pdbFunction, bool autoHandle = true);
 
 	int getModuleInt(std::string nid, std::string item);
 	bool getModuleBool(std::string nid, std::string item);

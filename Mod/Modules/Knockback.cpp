@@ -58,15 +58,15 @@ bool Knockback::enable() {
 		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.KnockbackRules_useLegacyKnockback), 
 			legacyKnockbackHook, NULL);
 		if (status != MH_OK) {
-			lerr("LegacyKnockbackHook doesn't work! MH_STATUS = " << status);
+			_PERR(this->name, "LegacyKnockbackHook doesn't work! MH_STATUS = " << status);
 			return false;
 		}
 	}
 	auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.Mob_knockback), mobKnockbackHook,
 		reinterpret_cast<LPVOID*>(&mobKnockback));
 	if (status != MH_OK) {
-		lerr("Mob::knockback hook doesn't work! MH_STATUS = " << status);
-		lerr("Mob knockback fn: " << reinterpret_cast<LPVOID>(funcs.Mob_knockback));
+		_PERR(this->name, "Mob::knockback hook doesn't work! MH_STATUS = " << status);
+		_PERR(this->name, "Mob knockback fn: " << reinterpret_cast<LPVOID>(funcs.Mob_knockback));
 		return false;
 	}
 	return true;

@@ -22,10 +22,14 @@ struct ModuleData {
 };
 
 struct ModuleFunctions {
-	uintptr_t KnockbackRules_useLegacyKnockback = 0;
-	uintptr_t Mob_knockback = 0;
-	uintptr_t Mob_hurtEffects_setHurtTime = 0;
-	uintptr_t ItemUseInventoryTransaction_handle = 0;
+#define INIT(x) uintptr_t x = 0;
+	INIT(KnockbackRules_useLegacyKnockback)
+	INIT(Mob_knockback)
+	INIT(Mob_hurtEffects_setHurtTime)
+	//INIT(ItemUseInventoryTransaction_handle)
+	INIT(MovePlayerPacket__read)
+	INIT(LevelSettings_LevelSettings_setSeed)
+#undef INIT
 };
 
 namespace main

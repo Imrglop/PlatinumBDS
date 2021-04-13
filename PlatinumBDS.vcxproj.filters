@@ -42,6 +42,9 @@
     <ClCompile Include="Mod\Modules\BasicAntiCheat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mod\Modules\SeedHider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -77,10 +80,15 @@
     <ClInclude Include="Mod\Modules\BasicAntiCheat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mod\Modules\SeedHider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="cpp.hint" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Platinum\settings.txt" />

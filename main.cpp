@@ -21,16 +21,17 @@
 #include "Settings/settings.h"
 #include "Mod/Module.h"
 
-#define PLATINUM_SEPERATE_THREAD FALSE
+#define PLATINUM_SEPERATE_THREAD false
 
 namespace mods
 {
     Knockback kb;
     HurtTime hurtTime;
     BasicAntiCheat basicAC;
+    SeedHider sh;
 }
 
-std::vector<Module*> modules = { &mods::kb, &mods::hurtTime, &mods::basicAC };
+std::vector<Module*> modules = { &mods::kb, &mods::hurtTime, &mods::basicAC, &mods::sh };
 
 ModuleData data;
 ModuleFunctions funcs;
@@ -40,18 +41,46 @@ SignatureScanner scanner = NULL;
 bool scanSigs() {
     using namespace settings;
     funcs.KnockbackRules_useLegacyKnockback = scanner.scan(
-        getFunction("KnockbackRules::useLegacyKnockback")
+        getFunction("KnockbackRules::useLegacyKnockback", false)
     );
     funcs.Mob_knockback = scanner.scan(
-        getFunction("Mob::knockback")
+        getFunction("Mob::knockback", false)
     );
     funcs.Mob_hurtEffects_setHurtTime = scanner.scan(
-        getFunction("Mob::hurtEffects:set-hurt-time")
+        getFunction("Mob::hurtEffects:set-hurt-time", false)
     );
-    //funcs.ItemUseInventoryTransaction_handle = scanner.scan(
-    //    getFunction("ItemUseInventoryTransaction::handle")
-    //);
+
+    std::string movePlayerFunc = getFunction("MovePlayerPacket::_read", false);
+    if (movePlayerFunc != "") {
+        funcs.MovePlayerPacket__read = scanner.scan(movePlayerFunc);
+    }
     
+    std::string func = getFunction("LevelSettings::LevelSettings:set-seed", false);
+    if (func != "") {
+        funcs.LevelSettings_LevelSettings_setSeed = scanner.scan(func);
+    }
+
+    int amountOfZeroFunctions = 0;
+    size_t sizeOfFunctions = sizeof(funcs);
+    size_t amountOfFunctions = sizeOfFunctions / sizeof(uintptr_t);
+
+    for (size_t i = 0; i < amountOfFunctions; i++) {
+        uintptr_t* lpFuncs = reinterpret_cast<uintptr_t*>(&funcs);
+        if (lpFuncs[i] == NULL) {
+#if defined(PLATINUM_DBG)
+            ldbg("Missing function (index: " << i << ")");
+#endif
+            amountOfZeroFunctions++;
+        }
+    }
+
+    llog("Functions: (" << (amountOfFunctions - amountOfZeroFunctions) << " / " << 
+        amountOfFunctions << ")");
+
+    if (amountOfZeroFunctions != 0) {
+        lwarn(amountOfZeroFunctions << " missing function(s). Not all modules will work.");
+    }
+
     return true;
 }
 
@@ -65,7 +94,7 @@ HANDLE getConsoleOutput() {
 }
 
 DWORD 
-#if PLATINUM_SEPERATE_THREAD == TRUE
+#if PLATINUM_SEPERATE_THREAD
 __stdcall
 #endif
 init(void* lpParam) {
@@ -119,7 +148,7 @@ init(void* lpParam) {
         }
     }
     else {
-        llog("Mods are disabled. Edit settings.txt to enable them.");
+        llog("Mods are disabled. Edit settings to enable them.");
     }
 
     return EXIT_SUCCESS;

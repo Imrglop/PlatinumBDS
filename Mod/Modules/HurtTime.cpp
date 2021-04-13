@@ -31,7 +31,7 @@ bool HurtTime::enable()
 
 	byte* lpOpcode = reinterpret_cast<byte*>(funcs.Mob_hurtEffects_setHurtTime);
 	if (lpOpcode == nullptr) {
-		lerr("Set hurt time is a null pointer!");
+		_PERR(this->name, "Set hurt time is a null pointer!");
 		return false;
 	}
 

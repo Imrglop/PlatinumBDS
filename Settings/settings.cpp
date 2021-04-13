@@ -82,10 +82,10 @@ Config* settings::getSigCache()
 	return currentSigCache;
 }
 
-std::string settings::getFunction(std::string pdbFunction)
+std::string settings::getFunction(std::string pdbFunction, bool autoHandle)
 {
 	std::string sig = currentSigCache->getString(pdbFunction);
-	if (sig == "") {
+	if (autoHandle && sig == "") {
 		lerr("Couldn't find function " << pdbFunction << " in sig cache!\n Make sure you're up to date with those files.");
 		throw std::exception("Couldn't get mod function signature.");
 	}

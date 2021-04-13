@@ -2,3 +2,5 @@ KnockbackRules::useLegacyKnockback=48 89 5c 24 ? 57 48 81 ec ? ? ? ? 48 8b d9 48
 Mob::knockback=48 8b c4 48 89 58 ? 57 48 81 ec ? ? ? ? 0f 29 70 ? 0f 29 78 ? 44 0f 29 40 ? 44 0f 29 48 ? 44 0f 29 50 ? 44 0f 29 58 ? 48 8b 05 ? ? ? ? 48 33 c4 48 89 44 24 ? 44 0f 28 cb
 Mob::hurtEffects:set-hurt-time=c7 86 ? ? ? ? ? ? ? ? c7 86 ? ? ? ? ? ? ? ? c7 86 ? ? ? ? ? ? ? ? 89 86
 ItemUseInventoryTransaction::handle=48 89 5c 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8d ac 24 ? ? ? ? 48 81 ec ? ? ? ? 0f 29 b4 24 ? ? ? ? 48 8b 05 ? ? ? ? 48 33 c4 48 89 85 ? ? ? ? 45 0f b6 f8 48 8b f2
+MovePlayerPacket::_read=48 89 5c 24 ? 57 48 83 ec ? 0f 29 74 24 ? 0f 29 7c 24 ? 48 8b fa 48 8b d9 44 8b 05
+LevelSettings::LevelSettings:set-seed=44+48 89 5c 24 ? 56 57 41 56 48 81 ec ? ? ? ? 41 8b d8

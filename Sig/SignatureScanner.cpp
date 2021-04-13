@@ -36,7 +36,15 @@ SignatureScanner::SignatureScanner(HANDLE hProcess, uintptr_t start, uintptr_t e
 
 uintptr_t SignatureScanner::scan(std::string pattern)
 {
-	std::vector<std::string> strbytes = sa_utils_ex::splitString(pattern, ' ');
+	using namespace sa_utils_ex;
+	if (pattern == "") return NULL;
+	auto sstr = splitString(pattern, '+');
+	int offset = 0;
+	if (sstr.size() > 1) {
+		offset = std::stoi(sstr[0]);
+		pattern = sstr[1];
+	}
+	std::vector<std::string> strbytes = splitString(pattern, ' ');
 	std::vector<int> signature = {};
 	for (unsigned int i = 0; i < strbytes.size(); i++) {
 		std::string str = strbytes[i];
@@ -65,7 +73,7 @@ uintptr_t SignatureScanner::scan(std::string pattern)
 			if (signature[j] != -1 && BDEREF((i + j)) != signature[j]) break;
 		}
 		if (j >= signature.size() - 1) {
-			return i;
+			return i + offset;
 		}
 	}
 	lwarn("Signature dead: " << pattern);
