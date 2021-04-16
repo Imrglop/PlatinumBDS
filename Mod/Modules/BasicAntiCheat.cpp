@@ -22,31 +22,38 @@ BasicAntiCheat::BasicAntiCheat() : Module(nid, name)
 	this->name = "BasicAntiCheat";
 }
 
-MovePlayerPacketRead readMovePlayerPacket = NULL;
+MovePlayerHandler handleMovePlayer = NULL;
+//SpawnXPHandler spawnXPHandler = NULL;
 
-StreamReadResult movePlayerPacketReadHook(ReadOnlyBinaryStream* lpPacket) {
-	//Vec3* lpPos = &lpMovePacket->position;
-	//llog("pos: " << lpPos/*<< lpPos.x << ", " << lpPos.y << ", " << lpPos.z*/);
-	return readMovePlayerPacket(lpPacket);
+void __cdecl handleMovePlayerPacketHook(void* _this, NetworkIdentifier* const& ni, MovePlayerPacket* const& packet) 
+{
+	ldbg("Move: " << packet);
+	handleMovePlayer(_this, ni, packet);
 }
 
-bool BasicAntiCheat::enable() {
+void __cdecl handleSpawnXPHook(void* _this, NetworkIdentifier* const& ni, void* const& _SpawnExperienceOrb_packet)
+{
+	// TODO: check if will cause memory leak somehow
+}
+
+bool BasicAntiCheat::enable() 
+{
 	using namespace settings;
 	using namespace main;
-	_PWARN(this->name, "This module is experimental.");
-	isAntiCrasher = getModuleBool(this->nid, "anti-crasher");
+	isAntiXP = getModuleBool(this->nid, "anti-spawn-experience-orb");
 	auto& funcs = getFunctions();
-	if (isAntiCrasher) {
-		_PWARN(this->name, "Anti Crasher is coming soon.");
-		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.MovePlayerPacket__read), movePlayerPacketReadHook,
-			reinterpret_cast<LPVOID*>(&readMovePlayerPacket));
-		if (status != MH_OK) {
-			_PERR(this->name, "Could not enable anti crasher!\n MH_STATUS = " << status << "\n Function: " << reinterpret_cast<LPVOID>(funcs.MovePlayerPacket__read));
-			return false;
+	if (isAntiXP) 
+	{
+		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket), handleSpawnXPHook, nullptr);
+		if (status != 0) 
+		{
+			lerr("Could not hook to spawn experience orb function!\n MH_Status = " << MH_StatusToString(status)
+				<< "\n Function = " << reinterpret_cast<void*>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket));
 		}
 	}
 	return true;
 }
 
-void BasicAntiCheat::disable() {
+void BasicAntiCheat::disable() 
+{
 }

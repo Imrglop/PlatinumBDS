@@ -19,6 +19,7 @@ class BasicAntiCheat : public Module
 {
 private:
 	bool isAntiCrasher = false;
+	bool isAntiXP = false;
 public:
 	BasicAntiCheat();
 	bool enable() override;

@@ -75,10 +75,10 @@ hurt-time:hurt-time=10
 
 anti-cheat:enabled=false
 
-# Whether it will patch a movement exploit
-# that will crash a server.
+# Patches an exploit that allows players to
+# spawn experience orbs.
 
-anti-cheat:anti-crasher=true
+anti-cheat:anti-spawn-experience-orb=true
 
 #
 # -- Seed Hider --

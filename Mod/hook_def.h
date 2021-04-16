@@ -1,6 +1,4 @@
 #pragma once
-typedef int InventoryTransactionError;
-typedef unsigned long StreamReadResult;
 
 class Player {
 public:
@@ -41,13 +39,10 @@ public:
 	signed __int32 teleportationCause; // Only if mode is 2
 	unsigned char entityType; // Only if mode is 2
 };
-
-class ReadOnlyBinaryStream {
-public:
-	//uintptr_t** vtable;
-	//virtual void* __ptr64 __cdecl _destructor(unsigned int);
+class NetworkIdentifier {
 };
 
 typedef void(__cdecl* Mob_knockback)(void*, void*, float, float, float, float, float);
 typedef int(*ItemUseInventoryTransactionHandle)(ItemUseInventoryTransaction*, Player*, bool);
-typedef StreamReadResult(*MovePlayerPacketRead)(ReadOnlyBinaryStream*);
+
+typedef void(__cdecl* MovePlayerHandler)(void*, NetworkIdentifier* const&, MovePlayerPacket* const&);

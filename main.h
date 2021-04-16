@@ -26,9 +26,8 @@ struct ModuleFunctions {
 	INIT(KnockbackRules_useLegacyKnockback)
 	INIT(Mob_knockback)
 	INIT(Mob_hurtEffects_setHurtTime)
-	//INIT(ItemUseInventoryTransaction_handle)
-	INIT(MovePlayerPacket__read)
 	INIT(LevelSettings_LevelSettings_setSeed)
+	INIT(ServerNetworkHandler_handle_SpawnExperienceOrbPacket)
 #undef INIT
 };
 
@@ -36,4 +35,6 @@ namespace main
 {
 	ModuleData& getData();
 	ModuleFunctions& getFunctions();
+	// 1.16.20 - 1.16.201
+	bool isLegacyVersion();
 };

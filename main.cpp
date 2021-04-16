@@ -35,6 +35,7 @@ std::vector<Module*> modules = { &mods::kb, &mods::hurtTime, &mods::basicAC, &mo
 
 ModuleData data;
 ModuleFunctions funcs;
+bool _isLegacyVersion = false;
 
 SignatureScanner scanner = NULL;
 
@@ -49,23 +50,21 @@ bool scanSigs() {
     funcs.Mob_hurtEffects_setHurtTime = scanner.scan(
         getFunction("Mob::hurtEffects:set-hurt-time", false)
     );
-
-    std::string movePlayerFunc = getFunction("MovePlayerPacket::_read", false);
-    if (movePlayerFunc != "") {
-        funcs.MovePlayerPacket__read = scanner.scan(movePlayerFunc);
-    }
     
-    std::string func = getFunction("LevelSettings::LevelSettings:set-seed", false);
-    if (func != "") {
-        funcs.LevelSettings_LevelSettings_setSeed = scanner.scan(func);
-    }
+    funcs.LevelSettings_LevelSettings_setSeed = scanner.scan(
+        getFunction("LevelSettings::LevelSettings:set-seed", false)
+    );
+
+    funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket = scanner.scan(
+        getFunction("ServerNetworkHandler::handle(SpawnExperienceOrbPacket)", false)
+    );
 
     int amountOfZeroFunctions = 0;
     size_t sizeOfFunctions = sizeof(funcs);
     size_t amountOfFunctions = sizeOfFunctions / sizeof(uintptr_t);
+    uintptr_t* lpFuncs = reinterpret_cast<uintptr_t*>(&funcs);
 
     for (size_t i = 0; i < amountOfFunctions; i++) {
-        uintptr_t* lpFuncs = reinterpret_cast<uintptr_t*>(&funcs);
         if (lpFuncs[i] == NULL) {
 #if defined(PLATINUM_DBG)
             ldbg("Missing function (index: " << i << ")");
@@ -109,6 +108,8 @@ init(void* lpParam) {
 
     settings::init(".");
 
+    _isLegacyVersion = settings::getSettings()->getBool("legacy-bds-version");
+
     // -------------- INITIALIZE APPLICATION INFORMATION --------------
 
     HMODULE* pHModule = reinterpret_cast<HMODULE*>(lpParam);
@@ -136,6 +137,11 @@ init(void* lpParam) {
                     llog("Loaded " << mod->name << ".");
                 }
             }
+#ifdef PLATINUM_DBG
+            else {
+                ldbg(mod->nid << ": not enabled");
+            }
+#endif
         }
         llog("Enabled mods.");
 
@@ -178,4 +184,8 @@ ModuleData& main::getData()
 
 ModuleFunctions& main::getFunctions() {
     return std::ref(funcs);
+}
+
+bool main::isLegacyVersion() {
+    return _isLegacyVersion;
 }

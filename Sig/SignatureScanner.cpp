@@ -114,5 +114,6 @@ uintptr_t SignatureScanner::scanEx(std::string pattern)
 			return i;
 		}
 	}
+	return NULL;
 }
 #undef RPM
