@@ -49,8 +49,8 @@ If enabled, hides the seed. Only works in the latest versions
 
 ### Basic Anti Cheat
 
-coming soon
+**Anti Spawn Experience Orb** (anti-spawn-experience-orb) Whether BDS will now block requests to spawn an experience orb on their location, found in cheat clients.
 
 ## License
 
-MIT License (Some source files, like libraries such as MinHook are not under this.)
+MIT License (Some source files, like libraries such as [MinHook](https://github.com/TsudaKageyu/minhook) are not protected by this license)

@@ -29,14 +29,27 @@ bool SeedHider::enable()
 	auto& funcs = getFunctions();
 	void* lpSetSeed = reinterpret_cast<void*>(funcs.LevelSettings_LevelSettings_setSeed);
 	if (lpSetSeed != nullptr) {
-		size_t size = 3;
+		bool isLegacy = main::isLegacyVersion();
+		if (!isLegacy) {
+			size_t size = 3;
+
+			DWORD dwOldProtect;
+
+			VirtualProtect(lpSetSeed, size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
+			memset(lpSetSeed, 0x90, size);
+			VirtualProtect(lpSetSeed, size, dwOldProtect, &dwOldProtect);
+			nlog("Seed hidden.");
+			return true;
+		}
+		// legacy version
+		/*size_t size = 3;
 
 		DWORD dwOldProtect;
 
 		VirtualProtect(lpSetSeed, size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 		memset(lpSetSeed, 0x90, size);
 		VirtualProtect(lpSetSeed, size, dwOldProtect, &dwOldProtect);
-		nlog("Seed hidden.");
+		nlog("Seed hidden.");*/
 		return true;
 	}
 	_PERR(this->name, "SeedHider does not support this BDS version.");
