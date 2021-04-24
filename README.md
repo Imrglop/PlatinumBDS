@@ -45,7 +45,7 @@ With this module, you can edit the horizontal and vertical knockback.
 
 ### Seed Hider
 
-If enabled, hides the seed. Only works in the latest versions
+If enabled, hides the seed from the Game settings menu for players.
 
 ### Basic Anti Cheat
 
