@@ -27,7 +27,7 @@ MovePlayerHandler handleMovePlayer = NULL;
 
 void __cdecl handleMovePlayerPacketHook(void* _this, NetworkIdentifier* const& ni, MovePlayerPacket* const& packet) 
 {
-	ldbg("Move: " << packet);
+	//ldbg("Move: " << packet);
 	handleMovePlayer(_this, ni, packet);
 }
 

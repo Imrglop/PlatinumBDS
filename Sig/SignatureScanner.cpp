@@ -67,16 +67,20 @@ uintptr_t SignatureScanner::scan(std::string pattern)
 		for (; j < signature.size(); j++)
 		{
 			if (i + j >= end) {
+#if defined(PLATINUM_DBG)
 				lwarn("Signature dead: " << pattern);
+#endif
 				return NULL;
 			}
 			if (signature[j] != -1 && BDEREF((i + j)) != signature[j]) break;
 		}
-		if (j >= signature.size() - 1) {
+		if (j >= signature.size()) {
 			return i + offset;
 		}
 	}
+#if defined(PLATINUM_DBG)
 	lwarn("Signature dead: " << pattern);
+#endif
 	return 0;
 }
 #undef BDEREF

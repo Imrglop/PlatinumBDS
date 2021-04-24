@@ -42,14 +42,16 @@ bool SeedHider::enable()
 			return true;
 		}
 		// legacy version
-		/*size_t size = 3;
 
 		DWORD dwOldProtect;
+		size_t size = 1;
+		
+		byte* pSetSeedOpcode = reinterpret_cast<byte*>(lpSetSeed);
 
 		VirtualProtect(lpSetSeed, size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
-		memset(lpSetSeed, 0x90, size);
+		*pSetSeedOpcode = 0xEB; // unconditional x64 JMP
 		VirtualProtect(lpSetSeed, size, dwOldProtect, &dwOldProtect);
-		nlog("Seed hidden.");*/
+		nlog("Seed hidden.");
 		return true;
 	}
 	_PERR(this->name, "SeedHider does not support this BDS version.");
