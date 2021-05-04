@@ -28,6 +28,7 @@ struct ModuleFunctions {
 	INIT(Mob_hurtEffects_setHurtTime)
 	INIT(LevelSettings_LevelSettings_setSeed)
 	INIT(ServerNetworkHandler_handle_SpawnExperienceOrbPacket)
+	INIT(Player_vtable)
 #undef INIT
 };
 

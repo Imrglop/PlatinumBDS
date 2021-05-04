@@ -15,6 +15,7 @@
 #include "BasicAntiCheat.h"
 #include "../../Settings/settings.h"
 #include "../../main.h"
+#include "../../Sig/vtable_hook.h"
 
 BasicAntiCheat::BasicAntiCheat() : Module(nid, name)
 {
@@ -22,18 +23,25 @@ BasicAntiCheat::BasicAntiCheat() : Module(nid, name)
 	this->name = "BasicAntiCheat";
 }
 
-MovePlayerHandler handleMovePlayer = NULL;
-//SpawnXPHandler spawnXPHandler = NULL;
+MovePlayerHandler handleMovePlayer;
+player_tickworld_t tickPlayer;
+set_pos_t setActorPos;
+base_tick_t baseTick;
 
 void __cdecl handleMovePlayerPacketHook(void* _this, NetworkIdentifier* const& ni, MovePlayerPacket* const& packet) 
 {
-	//ldbg("Move: " << packet);
 	handleMovePlayer(_this, ni, packet);
 }
 
 void __cdecl handleSpawnXPHook(void* _this, NetworkIdentifier* const& ni, void* const& _SpawnExperienceOrb_packet)
 {
-	// TODO: check if will cause memory leak somehow
+}
+
+const float maxTp = 3e6f;
+
+__int64 __cdecl baseTickHook(Actor* _this) {
+	printf("tick player: %llX\n", (unsigned __int64)_this);
+	return baseTick(_this);
 }
 
 bool BasicAntiCheat::enable() 
@@ -41,14 +49,32 @@ bool BasicAntiCheat::enable()
 	using namespace settings;
 	using namespace main;
 	isAntiXP = getModuleBool(this->nid, "anti-spawn-experience-orb");
+	isAntiCrasher = getModuleBool(this->nid, "anti-crasher");
 	auto& funcs = getFunctions();
 	if (isAntiXP) 
 	{
 		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket), handleSpawnXPHook, nullptr);
 		if (status != 0) 
 		{
-			lerr("Could not hook to spawn experience orb function!\n MH_Status = " << MH_StatusToString(status)
+			nerr("Could not hook to spawn experience orb function!\n MH_Status = " << MH_StatusToString(status)
 				<< "\n Function = " << reinterpret_cast<void*>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket));
+		}
+	}
+	if (isAntiCrasher) {
+		vftable_t vtPlayer = reinterpret_cast<vftable_t>(funcs.Player_vtable);
+		if (vtPlayer == NULL) {
+			this->isAntiCrasher = false;
+			nerr("Anti Crasher is not supported on this version.");
+			return false;
+		}
+		nwarn("Anti Crasher setting is experimental and wouldn't work properly.");
+		auto& tickFunc = vtPlayer[41];
+		int status = vh::hook(reinterpret_cast<LPVOID*>(&tickFunc), baseTickHook, reinterpret_cast<LPVOID*>(baseTick));
+		nlog("vt player: " << vtPlayer);
+		if (status != 0)
+		{
+			nerr("Could not hook to player normalTick function!\n VH_Status = " << vh::statusToString(status)
+				<< "\n Function = " << reinterpret_cast<void*>(tickFunc));
 		}
 	}
 	return true;
@@ -56,4 +82,9 @@ bool BasicAntiCheat::enable()
 
 void BasicAntiCheat::disable() 
 {
+	if (this->isAntiCrasher) {
+		vftable_t vtPlayer = reinterpret_cast<vftable_t>(main::getFunctions().Player_vtable);
+		auto tickFunc = vtPlayer[41];
+		vh::unhook(reinterpret_cast<LPVOID*>(tickFunc));
+	}
 }

@@ -29,6 +29,7 @@
     <ClCompile Include="Mod\Modules\SeedHider.cpp" />
     <ClCompile Include="Settings\settings.cpp" />
     <ClCompile Include="Sig\SignatureScanner.cpp" />
+    <ClCompile Include="Sig\vtable_hook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mod\Modules\BasicAntiCheat.h" />
@@ -43,14 +44,17 @@
     <ClInclude Include="Settings\settings.h" />
     <ClInclude Include="shared.h" />
     <ClInclude Include="Sig\SignatureScanner.h" />
+    <ClInclude Include="Sig\vtable_hook.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
+    <None Include="LegacySupport\README.md" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="LegacySupport\sigcache_1.16.201.txt" />
     <Text Include="Platinum\settings.txt" />
     <Text Include="Platinum\sigcache.txt" />
     <Text Include="Platinum\sigcache_LEGACY.txt" />

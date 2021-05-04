@@ -59,6 +59,26 @@ bool scanSigs() {
         getFunction("ServerNetworkHandler::handle(SpawnExperienceOrbPacket)", false)
     );
 
+    if (getFunction("__player_vtable_direct", false) == "true") {
+        std::string str = getFunction("Player::`vftable'");
+        funcs.Player_vtable = data.base + std::stoul(str, nullptr, 16);
+#ifdef PLATINUM_DBG
+        ldbg("player::`vftable'=" << funcs.Player_vtable);
+#endif
+    }
+    else {
+        uintptr_t sigRes = scanner.scan(getFunction("Player::`vftable'", false));
+        if (sigRes != 0) {
+#ifdef PLATINUM_DBG
+            ldbg("sigres: " << (void*)sigRes);
+#endif
+            int offset = *reinterpret_cast<int*>(sigRes + 3); // lea .., [<this value>], offset will wrap around
+            funcs.Player_vtable = sigRes + offset + 7;
+        }
+    }
+
+    // -------------- SUCCESS CHECK --------------
+
     int amountOfZeroFunctions = 0;
     size_t sizeOfFunctions = sizeof(funcs);
     size_t amountOfFunctions = sizeOfFunctions / sizeof(uintptr_t);
@@ -91,6 +111,8 @@ HANDLE getConsoleOutput() {
     }
     return output;
 }
+
+size_t numEnabledMods = 0;
 
 DWORD 
 #if PLATINUM_SEPERATE_THREAD
@@ -129,12 +151,15 @@ init(void* lpParam) {
 
     if (modsEnabled) {
         for (Module* mod : modules) {
-            if (settings::getModuleBool(mod->nid, "enabled")) {
+            mod->enabled = settings::getModuleBool(mod->nid, "enabled");
+            if (mod->enabled) {
                 if (!mod->enable()) {
+                    mod->enabled = false;
                     lerr("Mod " << mod->name << " failed to load.");
                 }
                 else {
                     llog("Loaded " << mod->name << ".");
+                    numEnabledMods++;
                 }
             }
 #ifdef PLATINUM_DBG
@@ -143,7 +168,7 @@ init(void* lpParam) {
             }
 #endif
         }
-        llog("Enabled mods.");
+        llog("Enabled " << numEnabledMods << " modules.");
 
     // -------------- INITIALIZE HOOKS --------------
 
@@ -172,7 +197,16 @@ int __stdcall DllMain(HMODULE hModule, DWORD ulCallReason)
 #endif
     }
     else if (ulCallReason == DLL_PROCESS_DETACH) {
+        for (Module* mod : modules) {
+            if (mod->enabled) {
+                mod->disable();
+                llog("Unloaded " << mod->name);
+            }
+        }
         MH_Uninitialize();
+        if (numEnabledMods > 0) {
+            llog("Disabled " << numEnabledMods << " modules.");
+        }
     }
     return TRUE;
 }

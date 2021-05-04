@@ -80,6 +80,11 @@ anti-cheat:enabled=false
 
 anti-cheat:anti-spawn-experience-orb=true
 
+# Prevents players from crashing servers
+# using exploits
+
+anti-cheat:anti-crasher=true
+
 #
 # -- Seed Hider --
 #
