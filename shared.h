@@ -14,7 +14,6 @@
 */
 
 #define WIN32_LEAN_AND_MEAN
-//#define PLATINUM_DBG // For debugging purposes.
 
 #if defined(_DEBUG)
 #	define PLATINUM_DBG

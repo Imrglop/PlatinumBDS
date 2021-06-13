@@ -31,7 +31,21 @@ void __cdecl handleSpawnXPHook(void* _this, NetworkIdentifier* const& ni, void* 
 {
 }
 
+struct IActorMovementProxy {};
+//void Player::move(Player* __hidden this, struct IActorMovementProxy*, const struct Vec3*)
+typedef void(__fastcall* player_move_t)(Player*, IActorMovementProxy*, Vec3*);
+player_move_t oPlayerMove;
+
 static float maxTp = 3e6f;
+
+void Player_moveF(Player* _this, IActorMovementProxy* proxy, Vec3* newPos) {
+	if (newPos->x >= maxTp ||
+		newPos->y >= maxTp ||
+		newPos->z >= maxTp) {
+		
+	}
+}
+
 
 bool BasicAntiCheat::enable() 
 {
@@ -51,14 +65,15 @@ bool BasicAntiCheat::enable()
 		}
 	}
 	if (isAntiCrasher) {
-		vftable_t vtPlayer = reinterpret_cast<vftable_t>(funcs.Player_vtable);
-		if (vtPlayer == NULL) {
+		//vftable_t vtPlayer = reinterpret_cast<vftable_t>(funcs.Player_vtable);
+		void* playerMoveFunc = reinterpret_cast<void*>(funcs.Plaer_move);
+		if (playerMoveFunc == NULL) {
 			this->isAntiCrasher = false;
 			nerr("Anti Crasher is not supported on this version.");
 			return false;
 		}
+
 		nwarn("Anti Crasher setting is experimental and wouldn't work properly.");
-		auto& tickFunc = vtPlayer[41];
 	}
 	return true;
 }
