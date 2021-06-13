@@ -13,9 +13,9 @@
 * link: https://github.com/Imrglop/PlatinumBDS
 */
 #include "BasicAntiCheat.h"
-#include "../../Settings/settings.h"
 #include "../../main.h"
 #include "../../Sig/vtable_hook.h"
+#include "../../Settings/settings.h"
 
 BasicAntiCheat::BasicAntiCheat() : Module(nid, name)
 {
@@ -27,6 +27,21 @@ MovePlayerHandler handleMovePlayer;
 player_tickworld_t tickPlayer;
 set_pos_t setActorPos;
 base_tick_t baseTick;
+get_descriptor_t getItemDescriptor;
+
+bool __cdecl useItemStackHook(ItemStack* item, Actor*, int, int, int, byte, float, float, float) {
+	llog("itemStack: " << item);
+	ItemStackBase* base = (ItemStackBase*)item;
+	llog("itemstackbase: " << base);
+	ItemDescriptor desc = getItemDescriptor(base);
+	llog("<logging descriptor>");
+	llog("block: " << desc.block);
+	llog("damage: " << desc.damage);
+	llog("isItem: " << desc.isItem);
+	llog("Item: " << desc.item);
+
+	return true;
+}
 
 void __cdecl handleMovePlayerPacketHook(void* _this, NetworkIdentifier* const& ni, MovePlayerPacket* const& packet) 
 {
@@ -38,9 +53,7 @@ void __cdecl handleSpawnXPHook(void* _this, NetworkIdentifier* const& ni, void* 
 }
 
 const float maxTp = 3e6f;
-
 __int64 __cdecl baseTickHook(Actor* _this) {
-	printf("tick player: %llX\n", (unsigned __int64)_this);
 	return baseTick(_this);
 }
 
@@ -51,6 +64,7 @@ bool BasicAntiCheat::enable()
 	isAntiXP = getModuleBool(this->nid, "anti-spawn-experience-orb");
 	isAntiCrasher = getModuleBool(this->nid, "anti-crasher");
 	auto& funcs = getFunctions();
+	getItemDescriptor = (get_descriptor_t)(main::getData().base + 0xA11840);
 	if (isAntiXP) 
 	{
 		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket), handleSpawnXPHook, nullptr);
@@ -70,7 +84,6 @@ bool BasicAntiCheat::enable()
 		nwarn("Anti Crasher setting is experimental and wouldn't work properly.");
 		auto& tickFunc = vtPlayer[41];
 		int status = vh::hook(reinterpret_cast<LPVOID*>(&tickFunc), baseTickHook, reinterpret_cast<LPVOID*>(baseTick));
-		nlog("vt player: " << vtPlayer);
 		if (status != 0)
 		{
 			nerr("Could not hook to player normalTick function!\n VH_Status = " << vh::statusToString(status)
@@ -85,6 +98,6 @@ void BasicAntiCheat::disable()
 	if (this->isAntiCrasher) {
 		vftable_t vtPlayer = reinterpret_cast<vftable_t>(main::getFunctions().Player_vtable);
 		auto tickFunc = vtPlayer[41];
-		vh::unhook(reinterpret_cast<LPVOID*>(tickFunc));
+		//vh::unhook(reinterpret_cast<LPVOID*>(tickFunc));
 	}
 }

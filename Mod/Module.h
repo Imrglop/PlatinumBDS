@@ -1,3 +1,4 @@
+#pragma once
 /*
 *
 * ------------------------------\
@@ -13,9 +14,11 @@
 * link: https://github.com/Imrglop/PlatinumBDS
 */
 
-#pragma once
+
 #include "../shared.h"
 #include "hook_def.h"
+
+#include "../Config/Config.h"
 
 #define nlog(item) _PLOG(this->name, item)
 #define nerr(item) _PERR(this->name, item)
@@ -33,4 +36,6 @@ public:
 	virtual bool enable();
 	virtual void disable();
 	virtual void tick();
+
+	Config* getConfig(std::string defaults = "");
 };

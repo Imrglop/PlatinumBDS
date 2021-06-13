@@ -45,6 +45,12 @@
     <ClCompile Include="Mod\Modules\SeedHider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sig\vtable_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mod\Modules\SignCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -83,16 +89,24 @@
     <ClInclude Include="Mod\Modules\SeedHider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sig\vtable_hook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mod\Modules\SignCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="cpp.hint" />
     <None Include="README.md" />
+    <None Include="LegacySupport\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Platinum\settings.txt" />
     <Text Include="Platinum\sigcache.txt" />
     <Text Include="Platinum\sigcache_LEGACY.txt" />
+    <Text Include="LegacySupport\sigcache_1.16.201.txt" />
   </ItemGroup>
 </Project>

@@ -88,9 +88,26 @@ struct Tick {
 
 };
 
+class Block {};
+class Item {};
+
+
+class ItemDescriptor {
+public:
+	Item* item;
+	Block* block;
+	short damage;
+	bool isItem;
+};
+
+class ItemStackBase {};
+class ItemStack : public ItemStackBase {};
+
 typedef void(__cdecl* Mob_knockback)(void*, void*, float, float, float, float, float);
 typedef int(*ItemUseInventoryTransactionHandle)(ItemUseInventoryTransaction*, Player*, bool);
 typedef int(__cdecl* player_tickworld_t)(Player*, Tick*);
 typedef void(__cdecl* set_pos_t)(Actor*, Vec3&);
 typedef __int64(__cdecl* base_tick_t)(Actor*);
 typedef void(__cdecl* MovePlayerHandler)(void*, NetworkIdentifier* const&, MovePlayerPacket* const&);
+typedef ItemDescriptor(__cdecl* get_descriptor_t)(ItemStackBase*);
+typedef bool(__cdecl* itemstack_useon_t)(ItemStack*, Actor*, int, int, int, byte, float, float, float);

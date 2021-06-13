@@ -17,9 +17,6 @@
 #include "../shared.h"
 
 namespace settings {
-
-
-
 	// Initializes the data structure for Platinum
 	void init(std::string bdsPath);
 

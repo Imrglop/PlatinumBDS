@@ -14,6 +14,7 @@
 */
 
 #include "Module.h"
+#include "../Settings/settings.h"
 #include <iostream>
 
 Module::Module(const char* nid, const char* name) {
@@ -33,4 +34,22 @@ void Module::disable() {
 
 void Module::tick()
 {
+}
+
+Config* Module::getConfig(std::string defaults)
+{
+	// --- DIRECTORY ---
+	using namespace settings;
+	std::string fol = getPath() + std::string("\\Modules");
+	BOOL status = CreateDirectoryA(fol.c_str(), NULL);
+	if (!status) {
+		DWORD err = GetLastError();
+		if (err != ERROR_ALREADY_EXISTS) {
+			return nullptr;
+		}
+	}
+	// -- CONFIG --
+	
+	Config* config = new Config(fol + "\\" + this->name, defaults);
+	return config;
 }
