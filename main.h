@@ -13,6 +13,10 @@
 * link: https://github.com/Imrglop/PlatinumBDS
 */
 
+#include <intrin.h>
+
+#pragma intrinsic(_ReturnAddress)
+
 #pragma once
 #include "shared.h"
 
@@ -22,13 +26,14 @@ struct ModuleData {
 };
 
 struct ModuleFunctions {
-#define INIT(x) uintptr_t x = 0;
-	INIT(KnockbackRules_useLegacyKnockback)
-	INIT(Mob_knockback)
-	INIT(Mob_hurtEffects_setHurtTime)
-	INIT(LevelSettings_LevelSettings_setSeed)
-	INIT(ServerNetworkHandler_handle_SpawnExperienceOrbPacket)
-	INIT(Player_vtable)
+#define INIT(x) uintptr_t x = 0
+	INIT(KnockbackRules_useLegacyKnockback);
+	INIT(Mob_knockback);
+	INIT(Mob_hurtEffects_setHurtTime);
+	INIT(ServerNetworkHandler_handle_SpawnExperienceOrbPacket);
+	INIT(Player_vtable);
+	INIT(_getSeed_return_address);
+	INIT(LevelData_getSeed);
 #undef INIT
 };
 

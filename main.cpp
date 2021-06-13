@@ -50,13 +50,17 @@ bool scanSigs() {
     funcs.Mob_hurtEffects_setHurtTime = scanner.scan(
         getFunction("Mob::hurtEffects:set-hurt-time", false)
     );
-    
-    funcs.LevelSettings_LevelSettings_setSeed = scanner.scan(
-        getFunction("LevelSettings::LevelSettings:set-seed", false)
-    );
 
     funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket = scanner.scan(
         getFunction("ServerNetworkHandler::handle(SpawnExperienceOrbPacket)", false)
+    );
+
+    funcs._getSeed_return_address = scanner.scan(
+        getFunction("_getSeed return address", false)
+    );
+
+    funcs.LevelData_getSeed = scanner.scan(
+        getFunction("LevelData::getSeed", false)
     );
 
     if (getFunction("__player_vtable_direct", false) == "true") {

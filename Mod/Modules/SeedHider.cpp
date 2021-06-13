@@ -14,8 +14,10 @@
 */
 
 #include "SeedHider.h"
-
 #include "../../main.h"
+#include <Windows.h>
+
+void* getSeedRetAddy;
 
 SeedHider::SeedHider() : Module(nid, name)
 {
@@ -23,35 +25,32 @@ SeedHider::SeedHider() : Module(nid, name)
 	this->name = "SeedHider";
 }
 
+SeedHider* globalThis;
+
+// unsigned int __fastcall LevelData::getSeed(LevelData* this)
+typedef uint(__fastcall* get_seed_t)(void* _this);
+get_seed_t oGetSeed;
+
+unsigned int LevelData_getSeedH(void* _this) {
+	static unsigned int newSeed = (unsigned int)settings::getModuleInt(globalThis->nid, "new-seed");
+	if (_ReturnAddress() == getSeedRetAddy) {
+		return newSeed;
+	}
+	return 0;
+}
+
 bool SeedHider::enable() 
 {
 	using namespace main;
+	globalThis = this;
 	auto& funcs = getFunctions();
-	void* lpSetSeed = reinterpret_cast<void*>(funcs.LevelSettings_LevelSettings_setSeed);
-	if (lpSetSeed != nullptr) {
-		bool isLegacy = main::isLegacyVersion();
-		if (!isLegacy) {
-			size_t size = 3;
-
-			DWORD dwOldProtect;
-
-			VirtualProtect(lpSetSeed, size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
-			memset(lpSetSeed, 0x90, size);
-			VirtualProtect(lpSetSeed, size, dwOldProtect, &dwOldProtect);
-			nlog("Seed hidden.");
-			return true;
-		}
-		// legacy version
-
-		DWORD dwOldProtect;
-		size_t size = 1;
-		
-		byte* pSetSeedOpcode = reinterpret_cast<byte*>(lpSetSeed);
-
-		VirtualProtect(lpSetSeed, size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
-		*pSetSeedOpcode = 0xEB; // unconditional x64 JMP
-		VirtualProtect(lpSetSeed, size, dwOldProtect, &dwOldProtect);
-		nlog("Seed hidden.");
+	void* getSeedF = reinterpret_cast<void*>(funcs.LevelData_getSeed);
+	getSeedRetAddy;
+	bool isLegacy = main::isLegacyVersion();
+	if (!isLegacy) {
+		llog("Hiding seed.");
+		getSeedRetAddy = reinterpret_cast<void*>(funcs._getSeed_return_address);
+		MH_CreateHook(getSeedF, LevelData_getSeedH, (LPVOID*)&oGetSeed);
 		return true;
 	}
 	_PERR(this->name, "SeedHider does not support this BDS version.");

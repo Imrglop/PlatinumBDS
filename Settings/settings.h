@@ -13,6 +13,7 @@
 * link: https://github.com/Imrglop/PlatinumBDS
 */
 
+#pragma once
 #include "../Config/Config.h"
 #include "../shared.h"
 

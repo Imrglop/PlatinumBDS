@@ -93,3 +93,7 @@ anti-cheat:anti-crasher=true
 # false - this module will be disabled.
 
 seed-hider:enabled=false
+
+# integer - The new seed to be displayed to players.
+
+seed-hider:new-seed=0

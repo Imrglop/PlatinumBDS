@@ -15,6 +15,8 @@
 
 #pragma once
 #include "../Module.h"
+#include "../../Settings/settings.h"
+
 class SeedHider : public Module
 {
 public:
