@@ -12,6 +12,10 @@ Platinum is a Bedrock Dedicated Server mod for enhancements and more customizati
 - `settings.txt`
 - etc.
 
+## Version
+
+Supports BDS **1.17.0**
+
 ## Usage
 
 *If you are using a legacy BDS version (1.16.20 - 1.16.201)*
