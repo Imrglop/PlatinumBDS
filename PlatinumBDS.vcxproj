@@ -33,6 +33,16 @@
     <ClCompile Include="Sig\vtable_hook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Minecraft\Block\Block.h" />
+    <ClInclude Include="Minecraft\Common.h" />
+    <ClInclude Include="Minecraft\Entity\Actor.h" />
+    <ClInclude Include="Minecraft\Entity\Player.h" />
+    <ClInclude Include="Minecraft\Item\Item.h" />
+    <ClInclude Include="Minecraft\Item\ItemDescriptor.h" />
+    <ClInclude Include="Minecraft\Item\ItemStack.h" />
+    <ClInclude Include="Minecraft\Item\ItemStackBase.h" />
+    <ClInclude Include="Minecraft\Pos\AABB.h" />
+    <ClInclude Include="Minecraft\Pos\Vector.h" />
     <ClInclude Include="Mod\Modules\BasicAntiCheat.h" />
     <ClInclude Include="Config\Config.h" />
     <ClInclude Include="Mod\Modules\HurtTime.h" />
