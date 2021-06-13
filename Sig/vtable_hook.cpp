@@ -37,4 +37,5 @@ std::string vh::statusToString(int status) {
 	case 2:
 		return "Function already hooked.";
 	}
+	return "";
 }
