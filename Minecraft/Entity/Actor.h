@@ -1,6 +1,9 @@
 #pragma once
 #include "../Pos/AABB.h"
-
+#include "../Item/ItemStack.h"
+#include "../Block/Block.h"
+#include <vector>
+#include <functional>
 
 class Actor {
 public:
@@ -34,7 +37,7 @@ public:
 	virtual __int64 getYawSpeedInDegreesPerSecond(void); // 0x1B
 	virtual __int64 getInterpolatedWalkAnimSpeed(float); // 0x1C
 	virtual __int64 nullsub_2(void); // 0x1D
-	virtual __int64 checkBlockCollisions(AABB const&, std::function<void(__int64&, Block const&, BlockPos const&, Actor&)>); // 0x1E
+	virtual __int64 checkBlockCollisions(AABB const&, std::function<void(__int64, Block const&, struct BlockPos const&, Actor&)>); // 0x1E
 	virtual __int64 updateEntityInside(void); // 0x1F
 	virtual __int64 updateEntityInside(AABB const&); // 0x20
 	virtual __int64 isFireImmune(void); // 0x21
@@ -118,7 +121,7 @@ public:
 	virtual __int64 performRangedAttack(Actor&, float); // 0x6F
 	virtual __int64 adjustDamageAmount(int&); // 0x70
 	virtual __int64 getEquipmentCount(void); // 0x71
-	virtual __int64 setOwner(ActorUniqueID); // 0x72
+	virtual __int64 setOwner(class ActorUniqueID); // 0x72
 	virtual __int64 setSitting(bool); // 0x73
 	virtual __int64 nullsub_18(void); // 0x74
 	virtual __int64 nullsub_19(void); // 0x75
@@ -139,7 +142,7 @@ public:
 	virtual __int64 animateHurt(void); // 0x84
 	virtual __int64 doFireHurt(int); // 0x85
 	virtual __int64 onLightningHit(void); // 0x86
-	virtual __int64 onBounceStarted(BlockPos const&, Block const&); // 0x87
+	virtual __int64 onBounceStarted(struct BlockPos const&, Block const&); // 0x87
 	virtual __int64 feed(int); // 0x88
 	virtual __int64 handleEntityEvent(__int64, int); // 0x89
 	virtual __int64 getPickRadius(void); // 0x8A
@@ -164,7 +167,7 @@ public:
 	virtual __int64 setOffhandSlot(ItemStack const&); // 0x9D
 	virtual __int64 getEquippedTotem(void); // 0x9E
 	virtual __int64 consumeTotem(void); // 0x9F
-	virtual __int64 save(CompoundTag&); // 0xA0
+	virtual __int64 save(class CompoundTag&); // 0xA0
 	virtual __int64 saveWithoutId(CompoundTag&); // 0xA1
 	virtual __int64 load(CompoundTag const&, __int64&); // 0xA2
 	virtual __int64 loadLinks(CompoundTag const&, std::vector<__int64>&, __int64&); // 0xA3
@@ -177,14 +180,14 @@ public:
 	virtual __int64 canFreeze(void); // 0xAA
 	virtual __int64 isWearingLeatherArmor(void); // 0xAB
 	virtual __int64 getHandleWaterAABB(void); // 0xAC
-	virtual __int64 handleInsidePortal(BlockPos const&); // 0xAD
+	virtual __int64 handleInsidePortal(struct BlockPos const&); // 0xAD
 	virtual __int64 nullsub_23(void); // 0xAE
 	virtual __int64 getPortalWaitTime(void); // 0xAF
 	virtual __int64 getDimensionId(void); // 0xB0
 	virtual __int64 nullsub_24(void); // 0xB1
 	virtual __int64 nullsub_25(void); // 0xB2
 	virtual __int64 changeDimension(__int64, bool); // 0xB3
-	virtual __int64 getSourceUniqueID(void); // 0xB4
+	virtual __int64 getSourceUniqueID2(void); // 0xB4
 	virtual __int64 checkFallDamage(float, bool); // 0xB5
 	virtual __int64 causeFallDamage(float, float, __int64); // 0xB6
 	virtual __int64 handleFallDistanceOnServer(float, float, bool); // 0xB7
@@ -216,7 +219,7 @@ public:
 	virtual __int64 onEffectUpdated(__int64 const&); // 0xD1
 	virtual __int64 onEffectRemoved(__int64&); // 0xD2
 	virtual __int64 getAnimationComponent(void); // 0xD3
-	virtual __int64 openContainerComponent(Player&); // 0xD4
+	virtual __int64 openContainerComponent(class Player&); // 0xD4
 	virtual __int64 swing(void); // 0xD5
 	virtual __int64 useItem(ItemStackBase&, __int64, bool); // 0xD6
 	virtual __int64 nullsub_31(void); // 0xD7
@@ -230,7 +233,7 @@ public:
 	virtual __int64 isAdventure(void); // 0xDF
 	virtual __int64 add(ItemStack&); // 0xE0
 	virtual __int64 drop(ItemStack const&, bool); // 0xE1
-	virtual __int64 getInteraction(Player&, __int64&, Vec3 const&); // 0xE2
+	virtual __int64 getInteraction(class Player&, __int64&, Vec3 const&); // 0xE2
 	virtual __int64 nullsub_33(void); // 0xE3
 	virtual __int64 nullsub_34(void); // 0xE4
 	virtual __int64 setSize(float, float); // 0xE5
@@ -260,10 +263,10 @@ public:
 	virtual __int64 _hurt(__int64 const&, int, bool, bool); // 0xFD
 	virtual __int64 markHurt(void); // 0xFE
 	virtual __int64 _getAnimationComponent(std::shared_ptr<__int64>&, __int64); // 0xFF
-	virtual __int64 readAdditionalSaveData(CompoundTag const&, __int64&); // 0x100
-	virtual __int64 addAdditionalSaveData(class CompoundTag&); // 0x101
-	virtual __int64 _playStepSound(BlockPos const&, Block const&); // 0x102
-	virtual __int64 _playFlySound(class BlockPos const&, Block const&); // 0x103
+	virtual __int64 readAdditionalSaveData(class CompoundTag const&, __int64&); // 0x100
+	virtual __int64 addAdditionalSaveData(CompoundTag&); // 0x101
+	virtual __int64 _playStepSound(struct BlockPos const&, Block const&); // 0x102
+	virtual __int64 _playFlySound(BlockPos const&, Block const&); // 0x103
 	virtual __int64 nullsub_40(void); // 0x104
 	virtual __int64 checkInsideBlocks(float); // 0x105
 	virtual __int64 pushOutOfBlocks(Vec3 const&); // 0x106
@@ -317,7 +320,7 @@ class Mob : public Actor {
 	virtual __int64 getLastHurtByMob(void); // 0x133
 	virtual __int64 setLastHurtByMob(Mob*); // 0x134
 	virtual __int64 getLastHurtByPlayer(void); // 0x135
-	virtual __int64 setLastHurtByPlayer(Player*); // 0x136
+	virtual __int64 setLastHurtByPlayer(class Player*); // 0x136
 	virtual __int64 getLastHurtMob(void); // 0x137
 	virtual __int64 setLastHurtMob(Actor*); // 0x138
 	virtual __int64 nullsub_44(void); // 0x139
@@ -359,7 +362,7 @@ class Mob : public Actor {
 	virtual __int64 nullsub_53(void); // 0x15D
 	virtual __int64 ascendLadder(void); // 0x15E
 	virtual __int64 ascendScaffolding(void); // 0x15F
-	virtual __int64 ascendScaffolding(void); // 0x160
+	virtual __int64 ascendScaffolding2(void); // 0x160
 	virtual __int64 descendScaffolding(void); // 0x161
 	virtual __int64 canAscendCurrentBlockByJumping(void); // 0x162
 	virtual __int64 dropContainer(void); // 0x163
