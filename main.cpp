@@ -63,22 +63,10 @@ bool scanSigs() {
         getFunction("LevelData::getSeed", false)
     );
 
-    if (getFunction("__player_vtable_direct", false) == "true") {
-        std::string str = getFunction("Player::`vftable'");
-        funcs.Player_vtable = data.base + std::stoul(str, nullptr, 16);
-#ifdef PLATINUM_DBG
-        ldbg("player::`vftable'=" << funcs.Player_vtable);
-#endif
-    }
-    else {
-        uintptr_t sigRes = scanner.scan(getFunction("Player::`vftable'", false));
-        if (sigRes != 0) {
-#ifdef PLATINUM_DBG
-            ldbg("sigres: " << (void*)sigRes);
-#endif
-            int offset = *reinterpret_cast<int*>(sigRes + 3); // lea .., [<this value>], offset will wrap around
-            funcs.Player_vtable = sigRes + offset + 7;
-        }
+    uintptr_t sigRes = scanner.scan(getFunction("Player::`vftable'", false));
+    if (sigRes != 0) {
+        int offset = *reinterpret_cast<int*>(sigRes + 3); // lea .., [<this value>], offset will wrap around
+        funcs.Player_vtable = sigRes + offset + 7;
     }
 
     // -------------- SUCCESS CHECK --------------

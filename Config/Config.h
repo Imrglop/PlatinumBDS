@@ -1,6 +1,6 @@
-#pragma once
 #ifndef CONFIG_H
 #define CONFIG_H
+#pragma once
 #include <string>
 #include <sstream>
 #include <fstream>

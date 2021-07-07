@@ -24,10 +24,10 @@ namespace settings {
 	// Gets the path of the files of Platinum
 	std::string& getPath();
 
-	Config* getSigCache();
-	Config* getSettings();
+	std::shared_ptr<Config> getSigCache();
+	std::shared_ptr<Config> getSettings();
 
-	std::string getFunction(std::string pdbFunction, bool autoHandle = true);
+	std::string getFunction(std::string functionName, bool autoHandle = true);
 
 	int getModuleInt(std::string nid, std::string item);
 	bool getModuleBool(std::string nid, std::string item);
