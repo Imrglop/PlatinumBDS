@@ -1,6 +1,10 @@
 #pragma once
 #include <sstream>
 
+struct BlockPos {
+	int x, y, z;
+};
+
 struct Vec3 {
 	float x;
 	float y;

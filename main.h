@@ -34,7 +34,6 @@ struct ModuleFunctions {
 	INIT(Player_vtable);
 	INIT(_getSeed_return_address);
 	INIT(LevelData_getSeed);
-	INIT(Plaer_move);
 #undef INIT
 };
 

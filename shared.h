@@ -15,6 +15,8 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+#	define PLATINUM_DBG
+
 #if defined(_DEBUG)
 #	define PLATINUM_DBG
 #endif
@@ -33,6 +35,8 @@ typedef unsigned char byte;
 #define _PWARN(l, x) setConsoleColor(0xE); std::cout<<"["<<l<<"] [WARN] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
 #if defined(PLATINUM_DBG)
 #	define _PDBG(l, x) setConsoleColor(0xB); std::cout<<"["<<l<<"] [DEBUG] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
+#elif
+#	define _PDBG(l, x)
 #endif
 
 #define llog(x) _PLOG("Platinum", x)
@@ -40,4 +44,6 @@ typedef unsigned char byte;
 #define lwarn(x) _PWARN("Platinum", x)
 #if defined(PLATINUM_DBG)
 #	define ldbg(x) _PDBG("Platinum", x)
+#elif
+#	define ldbg(x)
 #endif

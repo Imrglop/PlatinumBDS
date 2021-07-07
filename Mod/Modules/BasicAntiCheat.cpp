@@ -66,8 +66,8 @@ bool BasicAntiCheat::enable()
 	}
 	if (isAntiCrasher) {
 		//vftable_t vtPlayer = reinterpret_cast<vftable_t>(funcs.Player_vtable);
-		void* playerMoveFunc = reinterpret_cast<void*>(funcs.Plaer_move);
-		if (playerMoveFunc == NULL) {
+		//void* playerMoveFunc = reinterpret_cast<void*>(funcs.Plaer_move);
+		if (false) {
 			this->isAntiCrasher = false;
 			nerr("Anti Crasher is not supported on this version.");
 			return false;

@@ -58,13 +58,11 @@ uintptr_t SignatureScanner::scan(std::string pattern)
 
 	size_t sigSize = signature.size();
 	uintptr_t end = this->endAddress - signature.size();
-	size_t j;
-	uintptr_t i = this->startAddress;
+	size_t j = 0;
 #define BDEREF(x) *((byte*)x)
-	for (i < end; i++;)
+	for (size_t i = this->startAddress; i < end; i++)
 	{
-		j = 0;
-		for (; j < signature.size(); j++)
+		for (true; j < signature.size(); j++)
 		{
 			if (i + j >= end) {
 #if defined(PLATINUM_DBG)
@@ -103,10 +101,10 @@ uintptr_t SignatureScanner::scanEx(std::string pattern)
 	size_t j;
 	uintptr_t i = this->startAddress;
 #define RPM(addr, res) ReadProcessMemory(this->hProcess, (LPVOID)addr, &res, sizeof(res), 0)
-	for (i < end; i++;)
+	for (size_t i = this->startAddress; i < end; i++)
 	{
 		j = 0;
-		for (; j < signature.size(); j++)
+		for (true; j < signature.size(); j++)
 		{
 			if (signature[j] != -1) {
 				byte val = 0;
