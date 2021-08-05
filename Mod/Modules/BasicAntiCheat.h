@@ -14,12 +14,15 @@
 */
 #pragma once
 #include "../Module.h"
-
+#include "../../Minecraft/Network/MovePlayerPacket.h"
 class BasicAntiCheat : public Module
 {
 private:
 	bool isAntiCrasher = false;
 	bool isAntiXP = false;
+
+	static StreamReadResult MovePlayerPacket_readHook(MovePlayerPacket* _this, __int64 binaryStream);
+
 public:
 	BasicAntiCheat();
 	bool enable() override;

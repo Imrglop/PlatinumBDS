@@ -17,6 +17,25 @@
 #include "../../Sig/vtable_hook.h"
 #include "../../Settings/settings.h"
 
+typedef StreamReadResult(__fastcall* moveplayerpacket_read_t)(MovePlayerPacket*, __int64);
+
+moveplayerpacket_read_t oMovePlayerRead;
+
+static const float maxTp = 3e7F + 1;
+
+StreamReadResult BasicAntiCheat::MovePlayerPacket_readHook(MovePlayerPacket* _this, __int64 binaryStream)
+{
+	auto res = oMovePlayerRead(_this, binaryStream);
+	if (_this->position.x > maxTp ||
+		_this->position.y > maxTp ||
+		_this->position.z > maxTp) { // crasher packet
+		_this->position.x = 0;
+		_this->position.y = 0;
+		_this->position.z = 0;
+	}
+	return res;
+}
+
 BasicAntiCheat::BasicAntiCheat() : Module(nid, name)
 {
 	this->nid = "anti-cheat";
@@ -31,20 +50,6 @@ void __cdecl handleSpawnXPHook(void* _this, NetworkIdentifier* const& ni, void* 
 {
 }
 
-struct IActorMovementProxy {};
-//void Player::move(Player* __hidden this, struct IActorMovementProxy*, const struct Vec3*)
-typedef void(__fastcall* player_move_t)(Player*, IActorMovementProxy*, Vec3*);
-player_move_t oPlayerMove;
-
-static float maxTp = 3e6f;
-
-void Player_moveF(Player* _this, IActorMovementProxy* proxy, Vec3* newPos) {
-	if (newPos->x >= maxTp ||
-		newPos->y >= maxTp ||
-		newPos->z >= maxTp) {
-		
-	}
-}
 
 
 bool BasicAntiCheat::enable() 
@@ -54,7 +59,6 @@ bool BasicAntiCheat::enable()
 	isAntiXP = getModuleBool(this->nid, "anti-spawn-experience-orb");
 	isAntiCrasher = getModuleBool(this->nid, "anti-crasher");
 	auto& funcs = getFunctions();
-	getItemDescriptor = (get_descriptor_t)(main::getData().base + 0xA11840);
 	if (isAntiXP) 
 	{
 		auto status = MH_CreateHook(reinterpret_cast<LPVOID>(funcs.ServerNetworkHandler_handle_SpawnExperienceOrbPacket), handleSpawnXPHook, nullptr);
@@ -65,15 +69,17 @@ bool BasicAntiCheat::enable()
 		}
 	}
 	if (isAntiCrasher) {
-		//vftable_t vtPlayer = reinterpret_cast<vftable_t>(funcs.Player_vtable);
-		//void* playerMoveFunc = reinterpret_cast<void*>(funcs.Plaer_move);
-		if (false) {
+		auto readFunc = funcs.MovePlayerPacket__read;
+
+		if (!readFunc) {
 			this->isAntiCrasher = false;
 			nerr("Anti Crasher is not supported on this version.");
 			return false;
 		}
 
-		nwarn("Anti Crasher setting is experimental and wouldn't work properly.");
+		MH_CreateHook(reinterpret_cast<LPVOID>(readFunc), MovePlayerPacket_readHook, reinterpret_cast<LPVOID*>(&oMovePlayerRead));
+
+		//nwarn("Anti Crasher setting is experimental and wouldn't work properly.");
 	}
 	return true;
 }

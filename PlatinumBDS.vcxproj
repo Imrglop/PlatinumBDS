@@ -28,6 +28,7 @@
     <ClCompile Include="Mod\Module.cpp" />
     <ClCompile Include="Mod\Modules\SeedHider.cpp" />
     <ClCompile Include="Mod\Modules\SignCommand.cpp" />
+    <ClCompile Include="Minecraft\Network\Packet.cpp" />
     <ClCompile Include="Settings\settings.cpp" />
     <ClCompile Include="Sig\SignatureScanner.cpp" />
     <ClCompile Include="Sig\vtable_hook.cpp" />
@@ -41,6 +42,8 @@
     <ClInclude Include="Minecraft\Item\ItemDescriptor.h" />
     <ClInclude Include="Minecraft\Item\ItemStack.h" />
     <ClInclude Include="Minecraft\Item\ItemStackBase.h" />
+    <ClInclude Include="Minecraft\Network\MovePlayerPacket.h" />
+    <ClInclude Include="Minecraft\Network\StreamReadResult.h" />
     <ClInclude Include="Minecraft\Pos\AABB.h" />
     <ClInclude Include="Minecraft\Pos\Vector.h" />
     <ClInclude Include="Mod\Modules\BasicAntiCheat.h" />
@@ -53,6 +56,7 @@
     <ClInclude Include="Mod\Module.h" />
     <ClInclude Include="Mod\Modules\SeedHider.h" />
     <ClInclude Include="Mod\Modules\SignCommand.h" />
+    <ClInclude Include="Minecraft\Network\Packet.h" />
     <ClInclude Include="Settings\settings.h" />
     <ClInclude Include="shared.h" />
     <ClInclude Include="Sig\SignatureScanner.h" />

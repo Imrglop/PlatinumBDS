@@ -51,6 +51,9 @@
     <ClCompile Include="Mod\Modules\SignCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Minecraft\Network\Packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -123,6 +126,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Item\ItemStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Network\StreamReadResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Network\MovePlayerPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Network\Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

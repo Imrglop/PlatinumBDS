@@ -63,6 +63,10 @@ bool scanSigs() {
         getFunction("LevelData::getSeed", false)
     );
 
+    funcs.MovePlayerPacket__read = scanner.scan(
+        getFunction("MovePlayerPacket::_read", false)
+    );
+
     uintptr_t sigRes = scanner.scan(getFunction("Player::`vftable'", false));
     if (sigRes != 0) {
         int offset = *reinterpret_cast<int*>(sigRes + 3); // lea .., [<this value>], offset will wrap around
