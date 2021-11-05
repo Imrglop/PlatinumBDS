@@ -46,6 +46,7 @@ uintptr_t SignatureScanner::scan(std::string pattern)
 	}
 	std::vector<std::string> strbytes = splitString(pattern, ' ');
 	std::vector<int> signature = {};
+	signature.reserve(255); // make it faster
 	for (unsigned int i = 0; i < strbytes.size(); i++) {
 		std::string str = strbytes[i];
 		if (str == "??" || str == "?") {
