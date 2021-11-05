@@ -33,7 +33,7 @@ typedef unsigned char byte;
 #define _PWARN(l, x) setConsoleColor(0xE); std::cout<<"["<<l<<"] [WARN] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
 #if defined(PLATINUM_DBG)
 #	define _PDBG(l, x) setConsoleColor(0xB); std::cout<<"["<<l<<"] [DEBUG] ("<<__func__<<":"<<__LINE__<<") " << x << std::endl; setConsoleColor(0x7)
-#elif
+#else
 #	define _PDBG(l, x)
 #endif
 
@@ -42,6 +42,6 @@ typedef unsigned char byte;
 #define lwarn(x) _PWARN("Platinum", x)
 #if defined(PLATINUM_DBG)
 #	define ldbg(x) _PDBG("Platinum", x)
-#elif
+#else
 #	define ldbg(x)
 #endif
